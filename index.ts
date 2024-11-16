@@ -202,14 +202,19 @@ async function main() {
     ...devices["Desktop Edge"],
   });
 
-  context.addCookies(COOKIE?.split(';')?.map((item: string) => {
+  const cookies = COOKIE?.split(';')?.map((item: string) => {
     const arr = item.split('=')
     return {
-      name: arr[0],
-      value: arr[1],
-      path: '.juejin.cn'
+      name: arr[0].trim(),
+      value: arr[1].trim(),
+      // url: 'https://juejin.cn',
+      domain: '.juejin.cn',
+      path: '/'
     }
-  })??[])
+  })??[]
+  // console.log('cookies', cookies)
+
+  context.addCookies(cookies)
 
   const pages = context.pages();
   let page: Page;

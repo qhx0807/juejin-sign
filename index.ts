@@ -207,7 +207,7 @@ async function main() {
     return {
       name: arr[0],
       value: arr[1],
-      domain: '.juejin.cn'
+      path: '.juejin.cn'
     }
   })??[])
 

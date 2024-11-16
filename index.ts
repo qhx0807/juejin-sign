@@ -30,8 +30,8 @@ function addMessage(key: string, value: string) {
 async function loginCheck(page: Page) {
   await page.goto("https://juejin.cn/");
   // # 使用 JavaScript 设置 Cookie
-  await page.evaluate(`document.cookie = "${COOKIE}";`)
-  await page.goto("https://juejin.cn/");
+  // await page.evaluate(`document.cookie = "${COOKIE}";`)
+  // await page.goto("https://juejin.cn/");
   if (
     await page.locator("css=button.login-button").isVisible()
   ) {
@@ -201,6 +201,14 @@ async function main() {
     headless: true,
     ...devices["Desktop Edge"],
   });
+
+  context.addCookies(COOKIE?.split(';')?.map((item: string) => {
+    const arr = item.split('=')
+    return {
+      name: arr[0],
+      value: arr[1]
+    }
+  })??[])
 
   const pages = context.pages();
   let page: Page;

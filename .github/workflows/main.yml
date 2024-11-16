@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '18.19.0'
 
-      - name: Depend install and serve
+      - name: Depend install and start
         env:
           COOKIE: ${{ secrets.COOKIE }}
           EMAIL: ${{ secrets.EMAIL }}
@@ -26,4 +26,4 @@ jobs:
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
         run: |
           npm install
-          npm run serve
+          npm run start

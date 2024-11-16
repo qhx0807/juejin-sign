@@ -206,7 +206,8 @@ async function main() {
     const arr = item.split('=')
     return {
       name: arr[0],
-      value: arr[1]
+      value: arr[1],
+      domain: '.juejin.cn'
     }
   })??[])
 

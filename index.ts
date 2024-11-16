@@ -214,7 +214,7 @@ async function main() {
   })??[]
   // console.log('cookies', cookies)
 
-  context.addCookies(cookies)
+  await context.addCookies(cookies)
 
   const pages = context.pages();
   let page: Page;

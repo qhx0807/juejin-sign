@@ -5,7 +5,7 @@ import {
   responseHandler,
   waitForResponseHelper,
 } from "./utils";
-
+const { COOKIE } = require('./ENV.js')
 const pushMessage = require('./utils/pushMessage.js')
 
 const getMessage = () => {
@@ -17,6 +17,7 @@ ${message.get('checkedIn')}
 累计签到天数 ${message.get('sumCount')}
 当前幸运值 ${message.get('luckyValue')}
 免费抽奖次数 ${message.get('freeCount')}
+${message.get('freeDrawed')}
 `.trim()
 }
 
@@ -27,6 +28,9 @@ function addMessage(key: string, value: string) {
 }
 
 async function loginCheck(page: Page) {
+  await page.goto("https://juejin.cn/");
+  // # 使用 JavaScript 设置 Cookie
+  await page.evaluate(`document.cookie = "${COOKIE}";`)
   await page.goto("https://juejin.cn/");
   if (
     await page.locator("css=button.login-button").isVisible()

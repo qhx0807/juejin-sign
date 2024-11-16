@@ -198,7 +198,7 @@ async function lottery(page: Page) {
 async function main() {
 
   const context = await chromium.launchPersistentContext("./userData", {
-    headless: false,
+    headless: true,
     ...devices["Desktop Edge"],
   });
 

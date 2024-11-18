@@ -3,7 +3,7 @@ name: Growth
 on:
   schedule:
     # UTC 时间 0 点运行一次
-    - cron: '30 22 * * *'
+    - cron: '20 1 * * *'
   workflow_dispatch:
 
 jobs:

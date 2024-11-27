@@ -1,10 +1,8 @@
 import { chromium, devices, Page } from "playwright";
 import {
-  emailReport,
-  loadJsonFile,
   responseHandler,
   waitForResponseHelper,
-} from "./utils";
+} from "./utils/utils";
 const { COOKIE } = require('./ENV.js')
 const pushMessage = require('./utils/pushMessage.js')
 
@@ -29,12 +27,8 @@ function addMessage(key: string, value: string) {
 
 async function loginCheck(page: Page) {
   await page.goto("https://juejin.cn/");
-  // # 使用 JavaScript 设置 Cookie
-  // await page.evaluate(`document.cookie = "${COOKIE}";`)
-  // await page.goto("https://juejin.cn/");
-  if (
-    await page.locator("css=button.login-button").isVisible()
-  ) {
+  const hasLoginBtn = await page.locator("css=button.login-button").isVisible()
+  if (hasLoginBtn) {
     console.log("未登录，请切换为有头模式手动登录，登录完成后重启本程序");
     await page.evaluate(() => {
       document
@@ -43,6 +37,10 @@ async function loginCheck(page: Page) {
           "<div style='text-align: center; font-size: 32px;'>请手动登录掘金，登录完成后重启本程序</div>"
         );
     });
+    pushMessage({
+      type: 'error',
+      message: `登录已过期，请重新登录`,
+    })
     return false;
   }
   return true;
@@ -207,13 +205,12 @@ async function main() {
     return {
       name: arr[0].trim(),
       value: arr[1].trim(),
-      // url: 'https://juejin.cn',
       domain: '.juejin.cn',
       path: '/'
     }
   })??[]
-  // console.log('cookies', cookies)
 
+  // 设置cookie信息
   await context.addCookies(cookies)
 
   const pages = context.pages();
@@ -233,7 +230,6 @@ async function main() {
       type: 'info',
       message: getMessage(),
     })
-    // addMessage("报告状态", "QQ邮件已发送");
   } catch (error) {
     console.error(error);
     addMessage("错误信息", JSON.stringify(error, null, 2));

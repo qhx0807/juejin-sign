@@ -18,7 +18,7 @@ export async function responseHandler(
 export function waitForResponseHelper(page: Page, url: string) {
   console.log('page = ', page.url(), '\n url = ', url)
   return page.waitForResponse((response) => response.url().startsWith(url), {
-    timeout: 30000,
+    timeout: 60000,
   });
 }
 

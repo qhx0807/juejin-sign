@@ -1,23 +1,20 @@
 import { chromium, devices, Page } from "playwright";
-import {
-  responseHandler,
-  waitForResponseHelper,
-} from "./utils/utils";
-const { COOKIE } = require('./ENV.js')
-const pushMessage = require('./utils/pushMessage.js')
+import { responseHandler, waitForResponseHelper } from "./utils/utils";
+const { COOKIE } = require("./ENV.js");
+const pushMessage = require("./utils/pushMessage.js");
 
 const getMessage = () => {
   return `
-Hello ${message.get('userName')}
-${message.get('checkedIn')}
-当前矿石数 ${message.get('sumPoint')}
-连续签到天数 ${message.get('contCount')}
-累计签到天数 ${message.get('sumCount')}
-当前幸运值 ${message.get('luckyValue')}
-免费抽奖次数 ${message.get('freeCount')}
-${message.get('freeDrawed')}
-`.trim()
-}
+    Hello ${message.get("userName")}
+    ${message.get("checkedIn")}
+    当前矿石数 ${message.get("sumPoint")}
+    连续签到天数 ${message.get("contCount")}
+    累计签到天数 ${message.get("sumCount")}
+    当前幸运值 ${message.get("luckyValue")}
+    免费抽奖次数 ${message.get("freeCount")}
+    ${message.get("freeDrawed")}
+    `.trim();
+};
 
 const message: Map<string, string> = new Map();
 function addMessage(key: string, value: string) {
@@ -27,7 +24,7 @@ function addMessage(key: string, value: string) {
 
 async function loginCheck(page: Page) {
   await page.goto("https://juejin.cn/");
-  const hasLoginBtn = await page.locator("css=button.login-button").isVisible()
+  const hasLoginBtn = await page.locator("css=button.login-button").isVisible();
   if (hasLoginBtn) {
     console.log("未登录，请切换为有头模式手动登录，登录完成后重启本程序");
     await page.evaluate(() => {
@@ -38,9 +35,9 @@ async function loginCheck(page: Page) {
         );
     });
     pushMessage({
-      type: 'error',
+      type: "error",
       message: `登录已过期，请重新登录`,
-    })
+    });
     return false;
   }
   return true;
@@ -160,7 +157,7 @@ async function lottery(page: Page) {
     lockyRes,
     (data) => data.total_value
   );
-  addMessage('freeCount', freeCount)
+  addMessage("freeCount", freeCount);
 
   if (freeCount == 0) {
     addMessage("freeDrawed", "今日已免费抽奖");
@@ -194,24 +191,24 @@ async function lottery(page: Page) {
 }
 
 async function main() {
-
   const context = await chromium.launchPersistentContext("./userData", {
     headless: true,
     ...devices["Desktop Edge"],
   });
 
-  const cookies = COOKIE?.split(';')?.map((item: string) => {
-    const arr = item.split('=')
-    return {
-      name: arr[0].trim(),
-      value: arr[1].trim(),
-      domain: '.juejin.cn',
-      path: '/'
-    }
-  })??[]
+  const cookies =
+    COOKIE?.split(";")?.map((item: string) => {
+      const arr = item.split("=");
+      return {
+        name: arr[0].trim(),
+        value: arr[1].trim(),
+        domain: ".juejin.cn",
+        path: "/",
+      };
+    }) ?? [];
 
   // 设置cookie信息
-  await context.addCookies(cookies)
+  await context.addCookies(cookies);
 
   const pages = context.pages();
   let page: Page;
@@ -227,16 +224,16 @@ async function main() {
     await signin(page);
     await lottery(page);
     pushMessage({
-      type: 'info',
+      type: "info",
       message: getMessage(),
-    })
+    });
   } catch (error) {
     console.error(error);
     addMessage("错误信息", JSON.stringify(error, null, 2));
     pushMessage({
-      type: 'error',
+      type: "error",
       message: getMessage(),
-    })
+    });
   }
   await context.close();
 }

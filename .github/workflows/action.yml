@@ -19,11 +19,7 @@ jobs:
       - name: Depend install and start
         env:
           COOKIE: ${{ secrets.COOKIE }}
-          EMAIL: ${{ secrets.EMAIL }}
-          AUTHORIZATION_CODE: ${{ secrets.AUTHORIZATION_CODE }}
-          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-          DINGDING_WEBHOOK: ${{ secrets.DINGDING_WEBHOOK }}
-          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          MIAOTIXING_WEBHOOK: ${{ secrets.MIAOTIXING_WEBHOOK }}
         run: |
           npm install
           npm run start

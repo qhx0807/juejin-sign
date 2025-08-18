@@ -2,7 +2,7 @@ name: Growth
 
 on:
   schedule:
-    - cron: '30 0/8 * * *'
+    - cron: '30 8-15 * * *'
   
   workflow_dispatch:
 
